@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import User from "./user.schema.js";
 
 
 const todoSchema = mongoose.Schema({
@@ -15,10 +14,15 @@ const todoSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     deletedAt: {
         type: Date,
         default: null
-    }
+    },
+    
 }, {timestamps: true})
 
 export default mongoose.model("Todo", todoSchema)
