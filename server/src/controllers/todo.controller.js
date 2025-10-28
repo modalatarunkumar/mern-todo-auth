@@ -1,5 +1,5 @@
-import asyncHandler from "../service/asyncHandler";
-import CustomError from "../service/CustomError";
+import asyncHandler from "../service/asyncHandler.js";
+import CustomError from "../service/CustomError.js";
 import Todo from "../models/todo.schema.js";
 
 
@@ -61,7 +61,7 @@ export const deleteTodo = asyncHandler(async (req, res) => {
     const {user} = req;
     const {id} = req.params;
 
-    const todo = await Todo.findOne({id, userId:user.id, isDeleted: false});
+    const todo = await Todo.findOne({_id:id , userId:user.id, isDeleted: false});
 
     if(!todo){
         throw new CustomError("Todo not found to delete", 400)
