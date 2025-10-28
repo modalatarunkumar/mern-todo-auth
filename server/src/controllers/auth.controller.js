@@ -75,7 +75,8 @@ export const login = asyncHandler(async (req, res) => {
     if(isPasswordMathched){
         const token = await user.getJWTtoken()
         user.password = undefined
-        res.status(200).json({
+        res.cookie("token", token, cookieOptions)
+        return res.status(200).json({
             success: true,
             message: "login successfully",
             token,
