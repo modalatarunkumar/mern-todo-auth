@@ -32,7 +32,7 @@ export const signUp = asyncHandler(async (req, res) => {
     // lets add this data to database
     const user = await User.create({name, email, password});
     
-    const token = user.getJWTtoken()
+    const token = await user.getJWTtoken()    
 
     // safety
     user.password = undefined
