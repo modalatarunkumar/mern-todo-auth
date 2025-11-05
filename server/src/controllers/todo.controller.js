@@ -6,6 +6,7 @@ import Todo from "../models/todo.schema.js";
 export const createTodo = asyncHandler(async (req, res) => {
     const {user} = req;
     const {name} = req.body;
+    const userId = user.id || user._id;
 
     if(!name){
         throw new CustomError("Please give todo name", 400);
@@ -13,7 +14,7 @@ export const createTodo = asyncHandler(async (req, res) => {
 
     // check if todo with same name already exists for this user
 
-    const existingTodo = await Todo.findOne({userId:user.id,name,isCompleted:false, isDeleted:false})
+    const existingTodo = await Todo.findOne({userId,name,isCompleted:false, isDeleted:false})
     if(existingTodo){
             throw new CustomError("Todo already exists", 400)
     }
@@ -32,19 +33,20 @@ export const updateTodo = asyncHandler(async (req, res) => {
     const {user} = req;
     const {id:updateId} = req.params;
     const {name} = req.body;
+    const userId = user.id || user._id;
 
     if(!name){
         throw new CustomError("Please give name to update", 400);
     }
     
-    const existingTodo = await Todo.findOne({userId:user.id, name, isCompleted: false, isDeleted: false});
+    const existingTodo = await Todo.findOne({userId, name, isCompleted: false, isDeleted: false, _id: {$ne: updateId}});
 
     if(existingTodo){
         throw new CustomError("Todo name already exists", 400);
     }
     
-    // const udpatedTodo = await Todo.findByIdandUpdate({id:updateId}, name, {runValidators: false})
-    const todo = await Todo.findOne({_id:updateId, userId:user.id, isDeleted:false})
+    // const udpatedTodo = await Todo.findByIdandUpdate({_id:updateId}, name, {runValidators: false})
+    const todo = await Todo.findOne({_id:updateId, userId, isDeleted:false})
     if(!todo){
         throw new CustomError("Todo not found", 400)
     }
@@ -60,8 +62,9 @@ export const updateTodo = asyncHandler(async (req, res) => {
 export const deleteTodo = asyncHandler(async (req, res) => {
     const {user} = req;
     const {id} = req.params;
+    const userId = user.id || user._id;
 
-    const todo = await Todo.findOne({_id:id , userId:user.id, isDeleted: false});
+    const todo = await Todo.findOne({_id:id , userId, isDeleted: false});
 
     if(!todo){
         throw new CustomError("Todo not found to delete", 400)
@@ -79,8 +82,9 @@ export const deleteTodo = asyncHandler(async (req, res) => {
 export const toggleTodo = asyncHandler(async (req, res) => {
     const {user} = req;
     const {id:todoId} = req.params;
+    const userId = user.id || user._id;
     
-    const todo = await Todo.findOne({_id: todoId, userId:user.id, isDeleted: false})
+    const todo = await Todo.findOne({_id: todoId, userId, isDeleted: false})
     if(!todo){
         throw new CustomError("there is no todo to toggle", 400);
     }
@@ -96,10 +100,26 @@ export const toggleTodo = asyncHandler(async (req, res) => {
 
 export const getTodos = asyncHandler(async (req, res) =>{
     const {user} = req;
-    const todo = await Todo.find({userId:user.id, isDeleted: false});
+    const userId = user.id || user._id;
+    const todo = await Todo.find({userId, isDeleted: false}).sort({createdAt: -1}).select("id name isCompleted isDeleted");
 
     res.status(200).json({
         success:true,
+        data: todo
+    })
+})
+
+export const getATodo = asyncHandler(async (req, res) => {
+    const {user} = req;
+    const userId = user._id || user.id;
+    const {id:todoId} = req.params;
+    console.log("TodoOOD:",todoId)
+    const todo = await Todo.find({_id: todoId, userId, isDeleted: false}).select("id name isCompleted isDeleted")
+    if(!todo){
+        throw new CustomError("Todo not found by id", 400)
+    }
+    res.status(200).json({
+        success: true,
         data: todo
     })
 })

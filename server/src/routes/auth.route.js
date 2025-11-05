@@ -9,7 +9,7 @@ router.post("/signup", signUp);
 
 router.post("/login", login);
 
-router.get("/profile", getProfile);
+router.get("/profile", isLoggedIn, getProfile);
 
 router.get("/logout", isLoggedIn, logout);
 
