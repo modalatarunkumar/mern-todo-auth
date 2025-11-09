@@ -4,9 +4,8 @@ import conf from "../../../conf/index.js"
 import axios from "axios";
 
 const initialState = {
-    status: false,
+    status: "idle",
     user: null,
-    loading: false,
     message: ""
 }
 export const loginUser = createAsyncThunk("auth/loginUser", async (data, {rejectWithValue}) => {
@@ -15,7 +14,7 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (data, {reject
         return result?.data
         
     } catch (error) {
-        rejectWithValue(error.response?.data?.message || "Login failed")
+        return rejectWithValue(error.response?.data?.message || "Login failed")
     }
 })
 
@@ -24,7 +23,7 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, {rejectW
         const result = await axios.get(`${conf.appUrl}/auth/logout`, {withCredentials: true})
         return result?.data
     } catch (error) {
-        rejectWithValue(error.response?.data?.message || "Logout failed")
+        return rejectWithValue(error.response?.data?.message || "Logout failed")
     }
 })
 
@@ -33,58 +32,65 @@ export const signupUser = createAsyncThunk("auth/signupUser", async (data, {reje
         const result = await axios.post(`${conf.appUrl}/auth/signup`, data, {withCredentials: true})
         return result?.data
     } catch (error) {
-        rejectWithValue(error.response.data.message || "Signup failed")
+        return rejectWithValue(error.response?.data?.message || "Signup failed")
+    }
+})
+export const fetchUser = createAsyncThunk("auth/fetchUser", async(_, {rejectWithValue}) => {
+    try {
+        const result = await axios.get(`${conf.appUrl}/auth/profile`, {withCredentials: true})
+        return result?.data
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || "No user found")        
     }
 })
 const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        reset: (state) => {
+            state.status= "idle"
+            state.message = ""
+        }
+    },
     extraReducers: builder => {
+        const setPending = (state) => {
+            state.status = "loading"
+        }
+        const setRejected = (state, action) => {
+            state.status = "error"
+            state.message = action.payload
+        }
         builder
-        .addCase(loginUser.pending, (state) => {
-            state.loading = true
-        })
+        .addCase(loginUser.pending, setPending)
         .addCase(loginUser.fulfilled, (state, action) => {
-            state.status = true
-            state.loading = false
+            state.status = "succeeded"
             state.message = action.payload.message
             state.user = action.payload.user
         })
-        .addCase(loginUser.rejected, (state, action) => {
-            state.loading = false
-            state.message = action.payload.error
-            state.user = null
-            state.status = false
-        })
-        .addCase(logoutUser.pending, (state) => {
-            state.loading = true
-        })
+        .addCase(loginUser.rejected, setRejected)
+        .addCase(logoutUser.pending, setPending)
         .addCase(logoutUser.fulfilled, (state, action) => {
-            state.status = false
-            state.loading = false
+            state.status = "succeeded"
             state.message = action.payload.message
             state.user = null
         })
-        .addCase(logoutUser.rejected, (state, action) => {
-            state.message = action.payload.error
-            state.loading = false
-        })
-        .addCase(signupUser.pending, (state) => {
-            state.loading = true
-        })
+        .addCase(logoutUser.rejected, setRejected)
+        .addCase(signupUser.pending, setPending)
         .addCase(signupUser.fulfilled, (state, action) => {
-            state.loading = false
+            state.status = "succeeded"
             state.message = action.payload.message
             state.user = action.payload.user
-            state.status = true
         })
-        .addCase(signupUser.rejected, (state, action) => {
-            state.loading = false
-            state.message = action.payload.error
+        .addCase(signupUser.rejected, setRejected)
+        .addCase(fetchUser.pending, setPending)
+        .addCase(fetchUser.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+            state.user = action.payload.user
         })
+        .addCase(fetchUser.rejected, setRejected)
     }
 })
 
-
+export const { reset } = authSlice.actions
 export default authSlice.reducer
