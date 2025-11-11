@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import conf from "../../../conf/index.js"
-import axios from "axios";
+import { login, logout, signup, fetchProfile } from "./authAPI.js"
 
 const initialState = {
     status: "idle",
@@ -10,9 +9,7 @@ const initialState = {
 }
 export const loginUser = createAsyncThunk("auth/loginUser", async (data, {rejectWithValue}) => {
     try {
-        const result = await axios.post(`${conf.appUrl}/auth/login`, data, {withCredentials: true})
-        return result?.data
-        
+        return await login(data)        
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Login failed")
     }
@@ -20,8 +17,7 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (data, {reject
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, {rejectWithValue}) => {
     try {
-        const result = await axios.get(`${conf.appUrl}/auth/logout`, {withCredentials: true})
-        return result?.data
+        return await logout()
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Logout failed")
     }
@@ -29,16 +25,14 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, {rejectW
 
 export const signupUser = createAsyncThunk("auth/signupUser", async (data, {rejectWithValue}) => {
     try {
-        const result = await axios.post(`${conf.appUrl}/auth/signup`, data, {withCredentials: true})
-        return result?.data
+        return await signup(data)
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Signup failed")
     }
 })
 export const fetchUser = createAsyncThunk("auth/fetchUser", async(_, {rejectWithValue}) => {
     try {
-        const result = await axios.get(`${conf.appUrl}/auth/profile`, {withCredentials: true})
-        return result?.data
+        return await fetchProfile()
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "No user found")        
     }

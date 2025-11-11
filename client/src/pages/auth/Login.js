@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { loginUser} from './authSlice';
+import { loginUser } from '../../app/features/auth/authSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
+import { Input } from '../../components';
 
 function Login() {
     const [form, setForm] = useState({email: "", password: ""})
@@ -12,7 +13,12 @@ function Login() {
         setForm({...form, [e.target.name]: e.target.value})
     }
     const handleSubmit = (e) => {
-        e.preventDefault()    
+        e.preventDefault()
+        if(form.password === "" || form.email === "") {
+            alert("Please fill all fields")
+            return;
+        }
+        
         dispatch(loginUser(form))
     }
     
@@ -26,14 +32,8 @@ function Login() {
     <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
         <h1>Login</h1>
         <form onSubmit={handleSubmit} >
-            <div>
-                <label htmlFor='email' >Email: </label>
-                <input placeholder='Please enter email id' onChange={formChange} id='email' name='email' value={form.email}/>
-            </div>
-            <div>
-                <label htmlFor='password' >Password: </label>
-                <input placeholder='Enter password' id='password' name='password' value={form.password} onChange={formChange}/>
-            </div>
+            <Input value={form.email} name='email' placeholder="Please Enter email" onChange={formChange} label="Email:" />
+            <Input value={form.password} name="password" placeholder="Enter password" label="Password:" onChange= {formChange} />
             <div>
                 <input type='submit' value={"Login"} />
                 <input type='button' value={"Reset"} onClick={() => setForm({email: "", password: ""})}/>

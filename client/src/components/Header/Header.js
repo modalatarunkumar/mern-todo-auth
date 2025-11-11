@@ -50,7 +50,7 @@ function Header() {
                     </li>
                 ):null
                 ))}
-                {isLoggedIn && (<><li><LogoutBtn /></li><li style={{position: 'relative', right: "-50px"}}>{userName}</li></>)}
+                {isLoggedIn && (<><li><LogoutBtn /></li><li style={{position: 'relative', right: "-50px"}}><b>{userName}</b></li></>)}
         </ul>
     </header>
   )

@@ -5,7 +5,7 @@ import {Provider} from "react-redux";
 import store from "./app/store.js";
 import { Toaster } from "react-hot-toast";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Login from "./app/features/auth/Login.js";
+import { Login, Signup } from "./pages";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
@@ -17,10 +17,11 @@ root.render(
                 <Routes>
                     <Route path="/" element={<App />} >
                     <Route path="login" element={<Login />} />
+                    <Route path="signup" element={<Signup />} />
                     </Route>
                 </Routes>
             </Router>
-        <   Toaster />
+        <Toaster />
         </Provider>
     </React.StrictMode>
 
