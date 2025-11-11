@@ -4,29 +4,43 @@ import { Header } from './components';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, reset } from './app/features/auth/authSlice';
+import { fetchAllTodos, resetTodo } from './app/features/todo/todoSlice';
 
 
 function App() {
-  const {status:authStatus, message:authMessage} = useSelector((state) => state.auth)
+  const {status:authStatus, message:authMessage, user} = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const hasFetchedUser = useRef(false);
+  const isInitialFetch = useRef(true);
   useEffect(()=> {
     toast.dismiss()
-      if(authStatus === "succeeded"){
-        toast.success(authMessage)
+    if(authStatus === "succeeded"){
+        if(!isInitialFetch.current){
+          toast.success(authMessage)
+        }
         setTimeout(()=> dispatch(reset()), 1000)
       }
-      else if(authStatus === "error"){
+      else if(authStatus === "error" && !isInitialFetch.current){
         toast.error(authMessage)
       }
   }, [authStatus, authMessage, dispatch])
 
   useEffect(()=> {
     if(!hasFetchedUser.current){
-      dispatch(fetchUser())
+      dispatch(fetchUser()).finally(()=> {
+        isInitialFetch.current = false
+      })
       hasFetchedUser.current = true;
     }
   }, [dispatch])
+  useEffect(()=> {
+    if(user){
+      dispatch(fetchAllTodos())
+    }
+    else{
+      dispatch(resetTodo())
+    }
+  }, [dispatch, user])
   return (
     <div style={{position: "relative"}}>
       {/* Disable interactions when loading */}

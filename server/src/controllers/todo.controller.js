@@ -20,11 +20,12 @@ export const createTodo = asyncHandler(async (req, res) => {
     }
     // create new Todo
     const newTodo = await Todo.create({name,userId:user.id})
+    const {_id, name: todoName, isCompleted, isDeleted} = newTodo.toObject()
 
     res.status(200).json({
         success: true,
         message: "Todo created successfully",
-        data: newTodo
+        data: {_id, name: todoName, isCompleted, isDeleted}
     })
 })
 
@@ -55,7 +56,8 @@ export const updateTodo = asyncHandler(async (req, res) => {
     
     res.status(200).json({
         success: true,
-        message: "updated successfully"
+        message: "updated successfully",
+        data: todo
     })
 })
 
@@ -75,7 +77,8 @@ export const deleteTodo = asyncHandler(async (req, res) => {
 
     res.status(200).json({
         success:true,
-        message: "Deleted successfully"
+        message: "Deleted successfully",
+        data: id
     })
 })
 
@@ -114,9 +117,9 @@ export const getATodo = asyncHandler(async (req, res) => {
     const userId = user._id || user.id;
     const {id:todoId} = req.params;
     console.log("TodoOOD:",todoId)
-    const todo = await Todo.find({_id: todoId, userId, isDeleted: false}).select("id name isCompleted isDeleted")
+    const todo = await Todo.findOne({_id: todoId, userId, isDeleted: false}).select("id name isCompleted isDeleted")
     if(!todo){
-        throw new CustomError("Todo not found by id", 400)
+        throw new CustomError("Todo not found by id", 404)
     }
     res.status(200).json({
         success: true,
