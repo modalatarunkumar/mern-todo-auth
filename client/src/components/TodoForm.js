@@ -16,7 +16,7 @@ function TodoForm({todo}) {
         }
     }
   return (
-    <div  style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
+    <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
         <h1>{title} Todo</h1>
         <form onSubmit={handleSubmit}>
         <Input label="Todo Name:" value={form.name} onChange={(e) => setForm({name: e.target.value})} name="name" placeholder="Enter todo to add" />

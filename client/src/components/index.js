@@ -1,4 +1,7 @@
 import Header from "./Header/Header";
 import Input from "./Input";
 import TodoForm from "./TodoForm";
-export { Header, Input, TodoForm }
+import AllTodos from "./AllTodos";
+
+
+export { Header, Input, TodoForm, AllTodos }

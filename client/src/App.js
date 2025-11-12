@@ -3,8 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { Header } from './components';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser, reset } from './app/features/auth/authSlice';
-import { fetchAllTodos, resetTodo } from './app/features/todo/todoSlice';
+import { fetchUser, reset as authReset } from './app/features/auth/authSlice';
+import { fetchAllTodos, resetTodo, reset as todoReset } from './app/features/todo/todoSlice';
 
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
         if(!isInitialFetch.current){
           toast.success(authMessage)
         }
-        setTimeout(()=> dispatch(reset()), 1000)
+        setTimeout(()=> dispatch(authReset()), 1000)
       }
       else if(authStatus === "error" && !isInitialFetch.current){
         toast.error(authMessage)
@@ -41,10 +41,22 @@ function App() {
       dispatch(resetTodo())
     }
   }, [dispatch, user])
+  const {status: todoStatus, message: todoMessage} = useSelector((state) => state.todo);
+  useEffect(()=> {
+    toast.dismiss()
+    if(todoStatus === "succeeded" && user){
+      toast.success(todoMessage)
+      setTimeout(() => dispatch(todoReset()), 1000)
+    }
+    else if(todoStatus === "rejected" && user){
+      toast.error(todoMessage)
+    }
+  })
+  const loading = authStatus === "loading" || todoStatus === "loading";
   return (
     <div style={{position: "relative"}}>
       {/* Disable interactions when loading */}
-      {authStatus === "loading" && (
+      {loading && (
         <div
           style={{
             position: "fixed",

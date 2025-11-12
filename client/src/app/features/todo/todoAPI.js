@@ -13,6 +13,7 @@ export const getAll = async () => {
 }
 
 export const getOne = async (id) => {
+    console.log(id)
     const response = await axios.get(`${conf.appUrl}/todo/${id}`, {withCredentials: true});
     return response.data
 }
