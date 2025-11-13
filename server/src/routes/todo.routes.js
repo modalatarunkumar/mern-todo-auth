@@ -6,9 +6,9 @@ const router = Router()
 
 router.post("/", isLoggedIn, createTodo)
 router.get("/", isLoggedIn, getTodos)
+router.put("/toggle/:id", isLoggedIn, toggleTodo);
 router.put("/:id", isLoggedIn, updateTodo);
 router.delete("/:id", isLoggedIn, deleteTodo);
-router.put("/toggle/:id", isLoggedIn, toggleTodo);
 router.get("/:id", isLoggedIn, getATodo)
 
 

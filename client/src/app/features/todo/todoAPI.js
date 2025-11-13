@@ -29,7 +29,7 @@ export const remove = async (id) => {
 }
 
 export const toggle = async (id) => {
-    const response = await axios.put(`${conf.appUrl}/todo/toggle/${id}`, {withCredentials: true})
+    const response = await axios.put(`${conf.appUrl}/todo/toggle/${id}`, {}, {withCredentials: true});
     return response.data
 }
 

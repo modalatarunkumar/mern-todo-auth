@@ -1,16 +1,15 @@
 import React from 'react';
 import { TodoForm } from '../../components';
 import { useParams } from 'react-router-dom';
-import { fetchATodo } from '../../app/features/todo/todoSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 function EditTodo() {
-    const {todoId:id} = useParams();
-    const dispatch = useDispatch()
-    
-    const todo = dispatch(fetchATodo(id))
-    console.log("Todo", todo)
+    const {todoId} = useParams();
+    const {todos} = useSelector((state) => state.todo)
+    const index = todos.findIndex(todoItem => todoItem._id === todoId)
+    const todo = todos[index]
+
   return (
     <div>
         <TodoForm todo={todo} />

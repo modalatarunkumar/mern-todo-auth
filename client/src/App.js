@@ -18,7 +18,7 @@ function App() {
         if(!isInitialFetch.current){
           toast.success(authMessage)
         }
-        setTimeout(()=> dispatch(authReset()), 1000)
+        setTimeout(()=> dispatch(authReset()), 2000)
       }
       else if(authStatus === "error" && !isInitialFetch.current){
         toast.error(authMessage)
@@ -51,7 +51,7 @@ function App() {
     else if(todoStatus === "rejected" && user){
       toast.error(todoMessage)
     }
-  })
+  }, [dispatch, todoStatus, todoMessage, user])
   const loading = authStatus === "loading" || todoStatus === "loading";
   return (
     <div style={{position: "relative"}}>

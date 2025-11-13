@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from "./Input"
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateTodo, createTodo } from '../app/features/todo/todoSlice';
+import { useNavigate } from 'react-router-dom';
 function TodoForm({todo}) {
     const [form, setForm] = useState({name: todo?.name || ""});
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const {status} = useSelector((state) => state.todo)
     const title = todo ? "update" : "create";
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -15,6 +18,11 @@ function TodoForm({todo}) {
             dispatch(createTodo(form))
         }
     }
+    useEffect(() => {
+        if(status === "succeeded"){
+            navigate("/all-todos");
+        }
+    }, [navigate, status])
   return (
     <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
         <h1>{title} Todo</h1>

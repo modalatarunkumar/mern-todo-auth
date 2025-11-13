@@ -50,7 +50,7 @@ export const toggleTodo = createAsyncThunk("todo/toggleTodo", async (id, {reject
     try {
         return await toggle(id);
     } catch (error) {
-        rejectWithValue(error.response?.data?.message || "Toggle failed");
+        return rejectWithValue(error.response?.data?.message || "Toggle failed");
     }
 })
 
@@ -78,7 +78,7 @@ export const todoSlice = createSlice({
         .addCase(createTodo.fulfilled, (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
-            state.todos.push(action.payload.data)
+            state.todos.unshift(action.payload.data)
         })
         .addCase(fetchAllTodos.fulfilled, (state, action) => {
             state.status = "succeeded"
@@ -103,6 +103,15 @@ export const todoSlice = createSlice({
             state.status = "succeeded"
             const deletedId = action.payload.data.id;
             state.todos = state.todos.filter(todo => todo._id !== deletedId);
+            state.message = action.payload.message;
+        })
+        .addCase(toggleTodo.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            const toggledId = action.payload.data.id;
+            const index = state.todos.findIndex(todo => todo._id === toggledId);
+            if(index !== -1){
+                state.todos[index].isCompleted = !state.todos[index].isCompleted;
+            }
             state.message = action.payload.message;
         })
         .addMatcher(isPending(createTodo, fetchATodo, fetchAllTodos, updateTodo, deleteTodo, toggleTodo), (state) => {
