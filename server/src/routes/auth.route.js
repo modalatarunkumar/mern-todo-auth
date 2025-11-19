@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isLoggedIn } from "../middlewares/auth.middleware.js";
-import { getProfile, login, logout, signUp } from "../controllers/auth.controller.js";
+import { forgotPassword, getProfile, login, logout, resetPassword, signUp } from "../controllers/auth.controller.js";
 
 
 const router = Router()
@@ -13,5 +13,8 @@ router.get("/profile", isLoggedIn, getProfile);
 
 router.get("/logout", isLoggedIn, logout);
 
+router.post("/password/forgot", forgotPassword);
+
+router.post("/password/reset/:token", resetPassword);
 
 export default router;
