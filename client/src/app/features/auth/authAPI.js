@@ -23,3 +23,13 @@ export const fetchProfile = async () => {
     const response = await axios.get(`${conf.appUrl}/auth/profile`, {withCredentials: true});
     return response.data
 }
+
+export const forget = async (data) => {
+    const response = await axios.post(`${conf.appUrl}/auth/password/forgot`, data, {withCredentials:true})
+    return response.data;
+}
+
+export const resett = async (token, data) => {
+    const response = await axios.post(`${conf.appUrl}/auth/password/reset/${token}`, data, {withCredentials: true})
+    return response.data;
+}

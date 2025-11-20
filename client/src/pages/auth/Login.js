@@ -38,7 +38,7 @@ function Login() {
                 <input type='submit' value={"Login"} />
                 <input type='button' value={"Reset"} onClick={() => setForm({email: "", password: ""})}/>
             </div>
-
+            <div><button onClick={() => navigate("/forget")}>Forgot Password</button></div>
         </form>
         
     </div>

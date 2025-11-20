@@ -3,11 +3,23 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import routes from "./routes/index.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import config from "./config/index.js";
 
 const app = express()
 
+const allowedOrigins = [
+    "http://localhost:3000",
+    config.FRONTEND_URL
+]
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: function (origin, callback){
+        if(!origin || allowedOrigins.includes(origin)){
+            callback(null, true);
+        }
+        else{
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));

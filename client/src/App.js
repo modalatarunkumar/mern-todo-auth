@@ -1,58 +1,18 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './components';
-import toast from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser, reset as authReset } from './app/features/auth/authSlice';
-import { fetchAllTodos, resetTodo, reset as todoReset } from './app/features/todo/todoSlice';
-
+import { useSelector } from 'react-redux';
+import { useAuthNotifications, useFetchUserAndTodos, useTodoNotifications } from './hooks';
 
 function App() {
-  const {status:authStatus, message:authMessage, user} = useSelector((state) => state.auth)
-  const dispatch = useDispatch()
-  const hasFetchedUser = useRef(false);
-  const isInitialFetch = useRef(true);
-  useEffect(()=> {
-    toast.dismiss()
-    if(authStatus === "succeeded"){
-        if(!isInitialFetch.current){
-          toast.success(authMessage)
-        }
-        setTimeout(()=> dispatch(authReset()), 2000)
-      }
-      else if(authStatus === "error" && !isInitialFetch.current){
-        toast.error(authMessage)
-      }
-  }, [authStatus, authMessage, dispatch])
 
-  useEffect(()=> {
-    if(!hasFetchedUser.current){
-      dispatch(fetchUser()).finally(()=> {
-        isInitialFetch.current = false
-      })
-      hasFetchedUser.current = true;
-    }
-  }, [dispatch])
-  useEffect(()=> {
-    if(user){
-      dispatch(fetchAllTodos())
-    }
-    else{
-      dispatch(resetTodo())
-    }
-  }, [dispatch, user])
-  const {status: todoStatus, message: todoMessage} = useSelector((state) => state.todo);
-  useEffect(()=> {
-    toast.dismiss()
-    if(todoStatus === "succeeded" && user){
-      toast.success(todoMessage)
-      setTimeout(() => dispatch(todoReset()), 1000)
-    }
-    else if(todoStatus === "rejected" && user){
-      toast.error(todoMessage)
-    }
-  }, [dispatch, todoStatus, todoMessage, user])
-  const loading = authStatus === "loading" || todoStatus === "loading";
+  useAuthNotifications();
+  useFetchUserAndTodos();
+  useTodoNotifications();
+
+  const authLoading = useSelector((state) => state.auth.status === "loading");
+  const todoLoading = useSelector((state)=> state.todo.status === "loading");
+  const loading = authLoading || todoLoading;
   return (
     <div style={{position: "relative"}}>
       {/* Disable interactions when loading */}

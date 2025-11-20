@@ -5,8 +5,8 @@ import {Provider} from "react-redux";
 import store from "./app/store.js";
 import { Toaster } from "react-hot-toast";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import { Login, Signup, AddTodo, EditTodo } from "./pages";
-import AllTodos from "./components/AllTodos.js";
+import { Login, Signup, AddTodo, EditTodo, ForgetPassword, ResetPassword } from "./pages";
+import { AllTodos, Protected } from "./components";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
@@ -17,11 +17,13 @@ root.render(
             <Router >
                 <Routes>
                     <Route path="/" element={<App />} >
-                    <Route path="login" element={<Login />} />
-                    <Route path="signup" element={<Signup />} />
-                    <Route path="add-todo" element={<AddTodo />} />
-                    <Route path="edit-todo/:todoId" element={<EditTodo />} />
-                    <Route path="all-todos" element={<AllTodos />} />
+                    <Route path="login" element={<Protected authentication={false}><Login /></Protected>} />
+                    <Route path="signup" element={<Protected authentication={false}><Signup /></Protected>} />
+                    <Route path="forget" element={<Protected authentication={false}><ForgetPassword /></Protected>} />
+                    <Route path="reset/:token" element={<Protected authentication={false}><ResetPassword /></Protected>} />
+                    <Route path="add-todo" element={<Protected authentication ><AddTodo /></Protected>} />
+                    <Route path="edit-todo/:todoId" element={<Protected authentication ><EditTodo /></Protected>} />
+                    <Route path="all-todos" element={<Protected authentication ><AllTodos /></Protected>} />
                     </Route>
                 </Routes>
             </Router>

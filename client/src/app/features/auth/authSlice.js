@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { login, logout, signup, fetchProfile } from "./authAPI.js"
+import { login, logout, signup, fetchProfile, forget, resett } from "./authAPI.js"
 
 const initialState = {
     status: "idle",
@@ -35,6 +35,20 @@ export const fetchUser = createAsyncThunk("auth/fetchUser", async(_, {rejectWith
         return await fetchProfile()
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "No user found")        
+    }
+})
+export const forgetPassword = createAsyncThunk("auth/forgetPassword", async(data, {rejectWithValue}) => {
+    try {
+        return await forget(data)
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || "Forget failed")
+    }
+})
+export const resetPassword = createAsyncThunk("auth/resetPassword", async({token, password, confirmPassword}, {rejectWithValue}) => {
+    try {
+        return await resett(token, {password, confirmPassword})
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || "Reset failed")
     }
 })
 const authSlice = createSlice({
@@ -83,6 +97,18 @@ const authSlice = createSlice({
             state.user = action.payload.user
         })
         .addCase(fetchUser.rejected, setRejected)
+        .addCase(forgetPassword.pending, setPending)
+        .addCase(forgetPassword.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.message = action.payload.message
+        })
+        .addCase(forgetPassword.rejected, setRejected)
+        .addCase(resetPassword.pending, setPending)
+        .addCase(resetPassword.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.message = action.payload.message;
+        })
+        .addCase(resetPassword.rejected, setRejected)
     }
 })
 
