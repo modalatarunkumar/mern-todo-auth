@@ -10,7 +10,7 @@ import config from "./src/config/index.js";
         mongoose.connection.on("error", (err) => console.log("Error: ", err))
         console.log("DB connected succesfully")
 
-        app.on("error", () => {
+        app.on("error", (error) => {
             console.error("Error on connecting app with DB: ", error)
         })
 

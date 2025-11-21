@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Input } from "../../components";
 import { useDispatch, useSelector } from 'react-redux';
-import { forgetPassword } from '../../app/features/auth/authSlice';
+import { forgetPassword, setError } from '../../app/features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 function ForgetPassword() {
@@ -11,6 +11,10 @@ function ForgetPassword() {
     const {status} = useSelector((state) => state.auth);
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(!email){
+            dispatch(setError("Please enter email id"));
+            return;
+        }
         dispatch(forgetPassword({email}))
     }
     useEffect(() => {

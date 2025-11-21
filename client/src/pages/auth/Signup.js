@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Input } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
-import { signupUser } from '../../app/features/auth/authSlice'
+import { signupUser, setError } from '../../app/features/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
 
 function Signup() {
@@ -14,8 +14,14 @@ function Signup() {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(form.name==="" || form.password === ""||form.email === "") return;
-
+        if(form.name==="" || form.password === ""||form.email === ""){
+            dispatch(setError("Please fill all fields"));
+            return;
+        }
+        else if(form.password.length < 8){
+            dispatch(setError("Password should be 8 characters length"))
+            return;
+        }
         dispatch(signupUser(form))
     }
     useEffect(() => {
@@ -29,8 +35,8 @@ function Signup() {
         <h1>Signup</h1>
         <form onSubmit={handleSubmit}>
         <Input name="name" value={form.name} label="Name:" onChange={formChange} placeholder="Please enter name" />
-        <Input name="email" value={form.email} label="Email" onChange={formChange} placeholder="Please fill Email id" />
-        <Input name="password" value={form.password} label="Password" onChange={formChange} placeholder="Please enter Password" />
+        <Input name="email" type='email' value={form.email} label="Email" onChange={formChange} placeholder="Please fill Email id" />
+        <Input name="password" type="password" value={form.password} label="Password" onChange={formChange} placeholder="Please enter Password" />
         <div>
             <input type='submit' value={"Signup"} />
             <input type='button' value="reset" onClick={() => setForm({name: "", email: "", password:""})} />

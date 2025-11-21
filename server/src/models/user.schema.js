@@ -52,7 +52,7 @@ userSchema.methods = {
         return await bcrypt.compare(enteredPassword, this.password)
     },
     // generate JWT Token
-    getJWTtoken: async function () {
+    getJWTtoken: function () {
         return JWT.sign({_id: this._id, role: this.role}, config.JWT_SECRET,{
             expiresIn: config.JWT_EXPIRY
         })

@@ -1,18 +1,11 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './components';
-import { useSelector } from 'react-redux';
-import { useAuthNotifications, useFetchUserAndTodos, useTodoNotifications } from './hooks';
+import { useAuthTodoToast } from './hooks/useAuthTodoToast';
 
 function App() {
 
-  useAuthNotifications();
-  useFetchUserAndTodos();
-  useTodoNotifications();
-
-  const authLoading = useSelector((state) => state.auth.status === "loading");
-  const todoLoading = useSelector((state)=> state.todo.status === "loading");
-  const loading = authLoading || todoLoading;
+  const {loading} = useAuthTodoToast();
   return (
     <div style={{position: "relative"}}>
       {/* Disable interactions when loading */}

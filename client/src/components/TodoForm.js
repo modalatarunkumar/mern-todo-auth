@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Input from "./Input"
 import { useDispatch, useSelector } from 'react-redux';
-import { updateTodo, createTodo } from '../app/features/todo/todoSlice';
+import { updateTodo, createTodo, setError } from '../app/features/todo/todoSlice';
 import { useNavigate } from 'react-router-dom';
 function TodoForm({todo}) {
     const [form, setForm] = useState({name: todo?.name || ""});
@@ -11,6 +11,10 @@ function TodoForm({todo}) {
     const title = todo ? "update" : "create";
     const handleSubmit = (e) => {
         e.preventDefault()
+        if(!form.name){
+            dispatch(setError("Please provide todo name"));
+            return;
+        }
         if(todo){
             dispatch(updateTodo({id: todo._id, name: form.name}))
         }

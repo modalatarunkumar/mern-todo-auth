@@ -62,6 +62,10 @@ export const todoSlice = createSlice({
             state.status = "idle"
             state.message = ""
         },
+        setError: (state, action) => {
+            state.status = "rejected";
+            state.message = action.payload || "";
+        },
         resetTodo: (state) => {
             state.todos = []
         }
@@ -83,7 +87,7 @@ export const todoSlice = createSlice({
         .addCase(fetchAllTodos.fulfilled, (state, action) => {
             state.status = "succeeded"
             state.todos = action.payload.data
-            state.message = action.payload.message || "All Fetched"
+            state.message = action.payload.message || ""
         })
         .addCase(fetchATodo.fulfilled, (state, action) => {
             state.status = "succeeded"
@@ -126,6 +130,6 @@ export const todoSlice = createSlice({
     }
 })
 
-export const {reset, resetTodo} = todoSlice.actions
+export const {reset, resetTodo, setError} = todoSlice.actions
 
 export default todoSlice.reducer

@@ -106,7 +106,7 @@ export const toggleTodo = asyncHandler(async (req, res) => {
 export const getTodos = asyncHandler(async (req, res) =>{
     const {user} = req;
     const userId = user.id || user._id;
-    const todo = await Todo.find({userId, isDeleted: false}).sort({createdAt: -1}).select("id name isCompleted");
+    const todo = await Todo.find({userId, isDeleted: false}).sort({createdAt: -1}).select("_id name isCompleted");
 
     res.status(200).json({
         success:true,
@@ -119,7 +119,7 @@ export const getATodo = asyncHandler(async (req, res) => {
     const userId = user._id || user.id;
     const {id:todoId} = req.params;
     console.log("TodoOOD:",todoId)
-    const todo = await Todo.findOne({_id: todoId, userId, isDeleted: false}).select("id name isCompleted")
+    const todo = await Todo.findOne({_id: todoId, userId, isDeleted: false}).select("_id name isCompleted")
     if(!todo){
         throw new CustomError("Todo not found by id", 404)
     }

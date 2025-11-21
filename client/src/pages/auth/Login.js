@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { loginUser } from '../../app/features/auth/authSlice';
+import { loginUser, setError } from '../../app/features/auth/authSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Input } from '../../components';
@@ -15,7 +15,11 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault()
         if(form.password === "" || form.email === "") {
-            alert("Please fill all fields")
+            dispatch(setError("Please fill all fields"))
+            return;
+        }
+        else if(form.password.length < 8){
+            dispatch(setError("Password should be 8 characters length"))
             return;
         }
         
@@ -33,7 +37,7 @@ function Login() {
         <h1>Login</h1>
         <form onSubmit={handleSubmit} >
             <Input value={form.email} name='email' placeholder="Please Enter email" onChange={formChange} label="Email:" />
-            <Input value={form.password} name="password" placeholder="Enter password" label="Password:" onChange= {formChange} />
+            <Input value={form.password} type="password" name="password" placeholder="Enter password" label="Password:" onChange= {formChange} />
             <div>
                 <input type='submit' value={"Login"} />
                 <input type='button' value={"Reset"} onClick={() => setForm({email: "", password: ""})}/>
