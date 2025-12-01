@@ -7,13 +7,15 @@ function Todo({todo}) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
   return (
-    <p style={{border:"2px solid black", width: "80%",padding:"10px", margin: "10px"}}>
+    <div style={{border:"2px solid black", width: "80%",padding:"10px", margin: "10px", display:'flex', flexWrap:"wrap", justifyContent: "space-between"}}>
+        <div style={{display: 'flex', gap: "20px"}}>
         <input type='checkbox' checked={todo.isCompleted} onChange={()=> dispatch(toggleTodo(todo._id))}/>
-        {todo.name}
-        <>
+        <strong>{todo.name}</strong>
+        </div>
+        <div style={{display: 'flex', gap: "20px"}}>
             <button onClick={() => navigate(`/edit-todo/${todo._id}`)}>Edit</button><button onClick={() => dispatch(deleteTodo(todo._id))}>Delete</button>
-        </>
-    </p>
+        </div>
+    </div>
   )
 }
 

@@ -5,9 +5,9 @@ import LogoutBtn from './LogoutBtn';
 
 function Header() {
     const {user} = useSelector((state) => state.auth)
-    const isLoggedIn = user ? true: false;
+    const isLoggedIn = Boolean(user);
     let userName = "";
-    userName = useSelector((state) => state.auth.user?.name)
+    userName = user?.name;
     
     const navigate = useNavigate()
     const navItems = [

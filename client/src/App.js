@@ -5,7 +5,7 @@ import { useAuthTodoToast } from './hooks/useAuthTodoToast';
 
 function App() {
 
-  const {loading} = useAuthTodoToast();
+  const loading = useAuthTodoToast();
   return (
     <div style={{position: "relative"}}>
       {/* Disable interactions when loading */}

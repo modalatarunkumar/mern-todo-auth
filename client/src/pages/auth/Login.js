@@ -8,7 +8,7 @@ function Login() {
     const [form, setForm] = useState({email: "", password: ""})
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {status} = useSelector((state) => state.auth)
+    const {status, user} = useSelector((state) => state.auth)
     const formChange = (e) => {
         setForm({...form, [e.target.name]: e.target.value})
     }
@@ -27,11 +27,11 @@ function Login() {
     }
     
     useEffect(() => {
-        if(status === "succeeded"){
+        if(status === "succeeded" && user){
             setForm({email: "", password: ""})
             navigate("/")
         }
-    },[status, navigate])
+    },[status, user, navigate])
   return (
     <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
         <h1>Login</h1>
