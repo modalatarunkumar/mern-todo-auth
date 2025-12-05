@@ -67,7 +67,7 @@ userSchema.methods = {
         .digest("hex")
 
         // time  for token to expire
-        this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000
+        this.forgotPasswordExpiry = Date.now() + 60 * 60 * 1000
         
         return forgotToken
     }

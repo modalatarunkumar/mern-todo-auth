@@ -4,6 +4,7 @@ import User from "../models/user.schema.js";
 import mailHelper from "../utils/mailHelper.js";
 import crypto from "crypto";
 import config from "../config/index.js";
+import emailJsHelper from "../utils/emailJsHelper.js";
 
 export const cookieOptions = {
     expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -167,10 +168,14 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     const message = `Your password reset token is as follows \n\n ${resetUrl} \n\n if this was not requested by you, please ignore.`
 
     try {
-        await mailHelper({
+        // await mailHelper({
+        //     email: user.email,
+        //     subject: "Password Reset Mail",
+        //     message
+        // })
+        await emailJsHelper({
             email: user.email,
-            subject: "Password Reset Mail",
-            message
+            link: resetUrl,
         })
     } catch (error) {
         user.forgotPasswordToken = undefined;

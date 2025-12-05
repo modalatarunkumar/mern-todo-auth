@@ -15,6 +15,7 @@
   "author": "modala tarun kumar",
   "license": "ISC",
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
