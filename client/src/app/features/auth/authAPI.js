@@ -1,35 +1,34 @@
 // This file will only handle axois requests.
-import axios from "axios";
-import conf from "../../../conf";
+import axios from "../../../api/axiosInstance";
 
 // All functions return raw data or throw errors
 
 export const login = async (data) => {
-    const response = await axios.post(`${conf.appUrl}/auth/login`, data, {withCredentials: true});
-    return response.data;
+    const response = await axios.post(`/auth/login`, data);
+    return response;
 }
 
 export const logout = async () => {
-    const response = await axios.get(`${conf.appUrl}/auth/logout`, {withCredentials: true});
-    return response.data;
+    const response = await axios.get(`/auth/logout`);
+    return response;
 }
 
 export const signup = async (data) => {
-    const response = await axios.post(`${conf.appUrl}/auth/signup`, data, {withCredentials: true});
-    return response.data;
+    const response = await axios.post(`/auth/signup`, data);
+    return response;
 }
 
 export const fetchProfile = async () => {
-    const response = await axios.get(`${conf.appUrl}/auth/profile`, {withCredentials: true});
-    return response.data
+    const response = await axios.get(`/auth/profile`);
+    return response;
 }
 
 export const forget = async (data) => {
-    const response = await axios.post(`${conf.appUrl}/auth/password/forgot`, data, {withCredentials:true})
-    return response.data;
+    const response = await axios.post(`/auth/password/forgot`, data)
+    return response;
 }
 
 export const resett = async (token, data) => {
-    const response = await axios.post(`${conf.appUrl}/auth/password/reset/${token}`, data, {withCredentials: true})
-    return response.data;
+    const response = await axios.post(`/auth/password/reset/${token}`, data)
+    return response;
 }

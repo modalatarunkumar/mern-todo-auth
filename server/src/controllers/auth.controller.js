@@ -9,8 +9,8 @@ import emailJsHelper from "../utils/emailJsHelper.js";
 export const cookieOptions = {
     expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    secure: true,
-    sameSite: "none"
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production"? "none": "lax",
 }
 
 /******************************************************
@@ -107,8 +107,8 @@ export const logout = asyncHandler((_req, res) => {
     res.cookie("token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        secure: true,
-        sameSite: "none"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production"? "none": "lax",
     })
     res.status(200).json({
         success: true,
@@ -152,7 +152,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
         throw new CustomError("Please Enter email", 400);
     }
     
-    const user = await User.findOne({email});
+    const user = await User.findOne({email}).select("+forgotPasswordToken +forgotPasswordExpiry");
     
     if(!user){
         throw new CustomError("User not found", 404);

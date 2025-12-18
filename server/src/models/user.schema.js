@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, "Password is required"],
         minLength: [8, "Password must be 8 charactes length"],
-        select: false
+        select: false,
     },
     role: {
         type: String,
@@ -32,10 +32,12 @@ const userSchema = mongoose.Schema({
     forgotPasswordToken: {
         type: String,
         default: null,
+        select: false,
     },
     forgotPasswordExpiry: {
         type: Date,
-        default: null
+        default: null,
+        select: false,
     }
 },{timestamps:true})
 
