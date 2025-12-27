@@ -1,26 +1,37 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Todo from './Todo';
 import Input from "./Input";
 
 function AllTodos() {
     const { todos } = useSelector((state) => state.todo);
-    const filters = {
-      ALL:'All',
-      COMPLETED: 'Completed',
-      PENDING: 'Pending' 
-    }
-    const [filter, setFilter] = useState(filters[0]);
+    const counts = useMemo(()=> {
+      const completed = todos.filter(todo => todo.isCompleted).length;
+      const pending = todos.length - completed;
+      return {
+        all: todos.length,
+        completed,
+        pending
+      }
+    }, [todos]);
+    const filters = [
+      {key:"all", label: "All", count: counts.all},
+      {key:"completed", label: "Completed", count: counts.completed},
+      {key:"pending", label: "Pending", count: counts.pending},
+    ]
+    const [filter, setFilter] = useState(filters[0].key);
     const [search, setSearch] = useState("");
 
-    const filteredTodos = todos.filter((todo) => {
-      if(filter === filters.COMPLETED && !todo.isCompleted) return false;
-      if(filter === filters.PENDING && todo.isCompleted) return false;
+    const filteredTodos = useMemo(() => {
+      return todos.filter((todo) => {
+      if(filter === "completed" && !todo.isCompleted) return false;
+      if(filter === "pending" && todo.isCompleted) return false;
       
       if(search && !todo.name.toLowerCase().includes(search.toLowerCase()))
         return false;
       return true;
     });
+  }, [filter, todos, search]);
   return (
     <div>
         <h1 className='text-center text-2xl font-bold'>All Todos</h1>
@@ -30,8 +41,12 @@ function AllTodos() {
         
         {/* Filter buttons */}
         <div className='flex justify-center gap-3 my-4'>
-          {Object.values(filters).map((filterItem) => (<button key={filterItem} onClick={() => setFilter(filterItem)} className={filter === filterItem ? "bg-indigo-600 text-white px-3 py-1 rounded"
-    : "bg-gray-200 px-3 py-1 rounded"}>{filterItem}</button>))}
+          {filters.map(({key, label, count}) => (
+            <button 
+            key={key} 
+            onClick={() => setFilter(key)} 
+            className={filter === key ? "bg-indigo-600 text-white px-3 py-1 rounded"
+    : "bg-gray-200 px-3 py-1 rounded"}>{label} ({count})</button>))}
         </div>
         <div className='h-[250px] overflow-y-auto space-y-2'>
         {filteredTodos.length === 0 && (
