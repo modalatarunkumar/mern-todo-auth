@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input } from "../../components";
+import { Button, Input } from "../../components";
 import { useDispatch, useSelector } from 'react-redux';
 import { forgetPassword, setError } from '../../app/features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -24,11 +24,11 @@ function ForgetPassword() {
         }
     }, [navigate, status])
   return (
-    <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
-        <h1>Forget Password</h1>
+    <div>
+        <h1 className='text-center text-2xl font-bold'>Forget Password</h1>
         <form onSubmit={handleSubmit}>
             <Input name="email" value={email} onChange={(e) => setEmail(e.target.value)} label="Email: " placeholder="Please fill email" />
-            <input type="submit" value={"Submit"} />
+            <Button type='submit'>Submit</Button>
         </form>
     </div>
   )

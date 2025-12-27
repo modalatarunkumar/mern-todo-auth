@@ -38,8 +38,12 @@ function App() {
           </div>
         </div>
       )}
-      <Header />
-      <Outlet />
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+            <Header />
+            <Outlet />
+          </div>
+        </div>
     </div>
   )
 }

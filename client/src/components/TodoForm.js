@@ -3,6 +3,7 @@ import Input from "./Input"
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTodo, createTodo, setError } from '../app/features/todo/todoSlice';
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 function TodoForm({todo}) {
     const [form, setForm] = useState({name: todo?.name || ""});
     const dispatch = useDispatch();
@@ -28,11 +29,11 @@ function TodoForm({todo}) {
         }
     }, [navigate, status])
   return (
-    <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
-        <h1>{title} Todo</h1>
+    <div>
+        <h1 className='text-center text-2xl font-bold'>{title} Todo</h1>
         <form onSubmit={handleSubmit}>
         <Input label="Todo Name:" value={form.name} onChange={(e) => setForm({name: e.target.value})} name="name" placeholder="Enter todo to add" />
-        <input type='submit' value={title} />
+        <Button type='submit'>{title}</Button>
         </form>
     </div>
   )

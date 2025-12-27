@@ -10,6 +10,7 @@ const Input = ({name, value,type="text",label, onChange, ...props}) => {
         value={value}
         onChange={onChange}
         style={{marginLeft: "10px", padding: "5px"}}
+        className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
         {...props}/>
     </div>
   )

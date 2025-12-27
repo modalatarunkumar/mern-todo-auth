@@ -8,7 +8,7 @@ function LogoutBtn() {
         dispatch(logoutUser())        
     }
   return (
-    <button onClick={logout}>Logout</button>
+    <button onClick={logout} className='text-red-500 hover:text-red-600'>Logout</button>
   )
 }
 

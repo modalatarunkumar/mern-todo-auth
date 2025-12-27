@@ -32,12 +32,12 @@ function ResetPassword() {
       }
     }, [status, navigate])
   return (
-    <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
+    <div>
         <form onSubmit={handleSubmit}>
-          <h1>Reset Password</h1>
+          <h1 className='text-center text-2xl font-bold'>Reset Password</h1>
             <Input name="password" type="password" label="Password: " placeholder="Please Enter password to update" value={form.password} onChange={formChange} />
             <Input name="confirmPassword" type="password" label="Confirm Password: " placeholder="Confirm password" value={form.confirmPassword} onChange={formChange} />
-            <input type='submit' value={"Update"} />
+            <input type='submit' value={"Update"} className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition my-1' />
         </form>
     </div>
   )

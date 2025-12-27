@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { loginUser, setError } from '../../app/features/auth/authSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { Input } from '../../components';
+import { Button, Input } from '../../components';
 
 function Login() {
     const [form, setForm] = useState({email: "", password: ""})
@@ -33,16 +33,16 @@ function Login() {
         }
     },[status, user, navigate])
   return (
-    <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
-        <h1>Login</h1>
+    <div>
+        <h1 className='text-center text-2xl font-bold'>Login</h1>
         <form onSubmit={handleSubmit} >
             <Input value={form.email} name='email' placeholder="Please Enter email" onChange={formChange} label="Email:" />
             <Input value={form.password} type="password" name="password" placeholder="Enter password" label="Password:" onChange= {formChange} />
             <div>
-                <input type='submit' value={"Login"} />
-                <input type='button' value={"Reset"} onClick={() => setForm({email: "", password: ""})}/>
+                <Button type='submit'>Login</Button>
+                <Button onClick={() => setForm({email: "", password: ""})}>Reset</Button>
             </div>
-            <div><button onClick={() => navigate("/forget")}>Forgot Password</button></div>
+            <div><button onClick={() => navigate("/forget")} disabled={process.env.NODE_ENV === "production"} className='text-indigo-600'>Forgot Password</button></div>
         </form>
         
     </div>

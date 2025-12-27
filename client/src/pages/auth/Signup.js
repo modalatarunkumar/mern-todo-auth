@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Input } from '../../components'
+import { Button, Input } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { signupUser, setError } from '../../app/features/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
@@ -31,15 +31,15 @@ function Signup() {
             }
         },[status, navigate])
   return (
-    <div style={{width: "60%", border: "2px solid black", margin: "20px auto", textAlign: "center"}}>
-        <h1>Signup</h1>
+    <div>
+        <h1 className='text-center text-2xl font-bold'>Signup</h1>
         <form onSubmit={handleSubmit}>
         <Input name="name" value={form.name} label="Name:" onChange={formChange} placeholder="Please enter name" />
         <Input name="email" type='email' value={form.email} label="Email" onChange={formChange} placeholder="Please fill Email id" />
         <Input name="password" type="password" value={form.password} label="Password" onChange={formChange} placeholder="Please enter Password" />
         <div>
-            <input type='submit' value={"Signup"} />
-            <input type='button' value="reset" onClick={() => setForm({name: "", email: "", password:""})} />
+            <Button type='submit'>Signup</Button>
+            <Button onClick={() => setForm({name: "", email: "", password:""})}>Reset</Button>
         </div>
         </form>
     </div>
