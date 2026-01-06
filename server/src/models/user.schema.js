@@ -75,5 +75,13 @@ userSchema.methods = {
     }
 }
 
+userSchema.virtual("todos", {
+    ref: "Todo",
+    localField: "_id",
+    foreignField: "userId"
+});
+
+userSchema.set("toJSON", {virtuals: true});
+userSchema.set("toOblect", {virtuals: true});
 
 export default mongoose.model("User", userSchema)

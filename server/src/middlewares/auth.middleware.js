@@ -3,6 +3,7 @@ import asyncHandler from "../service/asyncHandler.js";
 import User from "../models/user.schema.js";
 import JWT from "jsonwebtoken";
 import config from "../config/index.js";
+import AuthRoles from "../utils/authRoles.js";
 
 
 export const isLoggedIn = asyncHandler(async (req, res, next)=> {
@@ -22,4 +23,11 @@ export const isLoggedIn = asyncHandler(async (req, res, next)=> {
     } catch (error) {
         throw new CustomError(error.message || "Not Authorized to access this resource", error.code || 500)
     }
+})
+
+export const isAdmin = asyncHandler((req, _res, next) => {
+    if(req.user.role !== AuthRoles.ADMIN){
+        throw new CustomError("Admin access only", 403)
+    }
+    next();
 })
