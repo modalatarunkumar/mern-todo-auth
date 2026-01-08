@@ -42,6 +42,8 @@ export const signUp = asyncHandler(async (req, res) => {
 
     // safety
     user.password = undefined
+    user.forgotPasswordExpiry = undefined
+    user.forgotPasswordExpiry = undefined
 
     // store this token in user's cookie
     res.cookie("token", token, cookieOptions);
@@ -81,6 +83,8 @@ export const login = asyncHandler(async (req, res) => {
     if(isPasswordMathched){
         const token = await user.getJWTtoken()
         user.password = undefined
+        user.forgotPasswordToken = undefined
+        user.forgotPasswordExpiry = undefined
         res.cookie("token", token, cookieOptions)
         return res.status(200).json({
             success: true,

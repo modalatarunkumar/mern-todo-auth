@@ -6,8 +6,6 @@ import LogoutBtn from './LogoutBtn';
 function Header() {
     const {user} = useSelector((state) => state.auth)
     const isLoggedIn = Boolean(user);
-    let userName = "";
-    userName = user?.name;
     
     const navItems = [
         {
@@ -24,6 +22,11 @@ function Header() {
             name: "Signup",
             slug: "/signup",
             active: !isLoggedIn
+        },
+        {
+            name: "Admin Dashboard",
+            slug: "/admin",
+            active: isLoggedIn && user?.role === "ADMIN"
         },
         {
             name: "All Todos",
@@ -52,7 +55,7 @@ function Header() {
                     
                 ):null
             ))}
-                {isLoggedIn && (<><LogoutBtn /><span><b>{userName}</b></span></>)}
+                {isLoggedIn && (<LogoutBtn />)}
             </div>
         </nav>
     </header>

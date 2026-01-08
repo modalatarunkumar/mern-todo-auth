@@ -13,7 +13,7 @@ export const isLoggedIn = asyncHandler(async (req, res, next)=> {
         token = req.cookies.token || req.headers.authorization.split(" ")[1]
     }
     if(!token){
-        throw new CustomError("Not authorized to access this resource", 401)
+        throw new CustomError("Not authorized to access this resource", 403)
 
     }
     try {

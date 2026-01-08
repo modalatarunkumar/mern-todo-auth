@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import { AllTodos, Protected } from "../components";
-import { AddTodo, EditTodo, ErrorPage, ForgetPassword, Login, ResetPassword, Signup } from "../pages";
+import { AdminProtected, AllTodos, Home, Protected } from "../components";
+import { AddTodo, EditTodo, ErrorPage, ForgetPassword, Login, ResetPassword, Signup, Users, UsersTodos } from "../pages";
+import AdminLayout from "../layout/AdminLayout";
+import UserTodo from "../pages/admin/UserTodo";
 
 const router = createBrowserRouter([
     {
@@ -9,6 +11,10 @@ const router = createBrowserRouter([
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
+            {
+                path:"/",
+                element: <Home />,
+            },
             {
                 path: "login",
                 element: (
@@ -66,6 +72,27 @@ const router = createBrowserRouter([
                 ),
             }
         ]
+    },
+    {
+    path:"/admin",
+        element: (
+            <AdminProtected>
+                <AdminLayout />
+            </AdminProtected>
+        ),
+        children: [{
+            path: "users",
+            element: <Users />
+        },
+        {
+            path: "users-todos",
+            element: <UsersTodos />
+        },
+        {
+            path: "users/:userId",
+            element: <UserTodo />
+        }
+    ]
     },
     {
         path: "*",

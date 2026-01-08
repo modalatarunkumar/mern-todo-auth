@@ -12,6 +12,29 @@ export const getAllUsers = asyncHandler(async (req, res) => {
     })
 })
 
+export const getAUserTodos = asyncHandler(async (req, res) => {
+    const {id: userId} = req.params;
+
+    // optional but good practice
+    const userExists = await User.findById(userId).select("_id");
+    if(!userExists){
+        throw new CustomError("User not found", 404);
+    }
+
+    const todos = await Todo.find({
+        userId, 
+        isDeleted: false
+    })
+    .select("_id name isCompleted createdAt updatedAt")
+    .sort({createdAt: -1});
+
+    res.status(200).json({
+        success: true,
+        data: {todos, userId}
+    })
+
+})
+
 export const getAllUsersWithTodos = asyncHandler(async (req, res) => {
     // todo-centric way increases payload
     // const todos = await Todo.find({isDeleted: false}).populate("userId");
@@ -28,11 +51,10 @@ export const getAllUsersWithTodos = asyncHandler(async (req, res) => {
         data: users
     })
 })
-
 export const adminDeleteTodo = asyncHandler(async (req, res) => {
     const {id} = req.params;
 
-    const todo = await Todo.findById(id);
+    const todo = await Todo.findOne({_id:id, isDeleted: false});
     if(!todo){
         throw new CustomError("Todo not found", 404);
     }
@@ -44,6 +66,6 @@ export const adminDeleteTodo = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         message: "Todo deleted by admin",
-        data: {id}
+        data: {todoId:id, userId: todo.userId}
     })
 })

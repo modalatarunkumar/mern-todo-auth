@@ -11,28 +11,10 @@ function App() {
       {/* Disable interactions when loading */}
       {loading && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            zIndex: 9999,
-            cursor: "not-allowed",
-            userSelect: "none",
-            pointerEvents: "all", // intercept clicks
-          }}
+          className='fixed inset-0 bg-white/50 z-[9999] cursor-not-allowed select-none pointer-events-auto'
         >
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-            }}
+          <div 
+          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl font-bold'
           >
             Loading...
           </div>
