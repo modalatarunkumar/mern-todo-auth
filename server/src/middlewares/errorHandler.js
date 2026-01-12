@@ -27,6 +27,15 @@ const errorHandler = (err, _req, res, _next) => {
     statusCode = 409;
     message = `Duplicate value for ${Object.keys(err.keyValue).join(", ")}`;
   }
+  else if (err.name === "JsonWebTokenError") {
+    statusCode = 401;
+    message = "Invalid token. Please login again.";
+  }
+
+  else if (err.name === "TokenExpiredError") {
+    statusCode = 401;
+    message = "Token expired. Please login again.";
+  }
   // production safe message
   if(process.env.NODE_ENV === "production"){
 
